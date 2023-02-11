@@ -16,13 +16,6 @@ module.exports =  ((sequelize, DataTypes) => {
             autoIncrement: true,
             primaryKey: true
         },
-        UserId : {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "Users",
-                key: 'Id'
-            }
-        },
         MobileNumber :  {
             type: DataTypes.INTEGER,
             allowNull: true,

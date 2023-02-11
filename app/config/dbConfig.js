@@ -1,4 +1,6 @@
 const {Sequelize, DataTypes} = require("sequelize");
+const fs = require('fs');
+
 // import { Sequelize,DataTypes } from 'sequelize';
 
 const sequelize = new Sequelize('InventoryManagement','root','1234',{
@@ -27,11 +29,80 @@ let db = {
   async Sync() {
     try {
       console.log("lksldnlkb");
-      await db["sequelize"].sync({force:true});
+      await db["sequelize"].sync({force:false});
     } catch (error) {
       console.error(error);
     }
   },
+  async DataDump(){
+    var tables
+    await sequelize.query("SHOW TABLES").then(([results, metadata]) => {
+      tables = results.map(result => result[Object.keys(result)[0]]);
+        console.log("Tables:", tables);
+    });
+
+    tables.forEach(table => {
+      sequelize.query(`DESCRIBE ${table}`)
+        .then(([results, metadata]) => {
+          const columns = results.map(result => `${result.Field} ${result.Type}`).join(', ');
+          const createTableQuery = `CREATE TABLE ${table} (${columns});`;
+          sequelize.query(`SELECT * FROM ${table}`)
+            .then(([results, metadata]) => {
+              const sqlQueries = results.map(result => {
+                const values = Object.values(result).map(value => {
+                  if (typeof value === 'string') {
+                    return `'${value.replace(/'/g, "\\'")}'`;
+                  }
+                  return value;
+                });
+                return `INSERT INTO ${table} VALUES (${values.join(', ')});`;
+              });
+              fs.writeFile(`./app/sql/${table}.sql`, `${createTableQuery}\n\n${sqlQueries.join('\n')}`, (err) => {
+                if (err) throw err;
+                console.log(`Table ${table} data and structure exported successfully`);
+              });
+            });
+        });
+    });
+
+    
+    // tables.forEach(table => {
+    //   sequelize.query(`SELECT * FROM ${table}`)
+    //     .then(([results, metadata]) => {
+    //       const sqlQueries = results.map(result => {
+    //         const values = Object.values(result).map(value => {
+    //           if (typeof value === 'string') {
+    //             return `'${value.replace(/'/g, "\\'")}'`;
+    //           }
+    //           return value;
+    //         });
+    //         return `INSERT INTO ${table} VALUES (${values.join(', ')});`;
+    //       });
+    //       fs.writeFile(`${table}.sql`, sqlQueries.join('\n'), (err) => {
+    //         if (err) throw err;
+    //         console.log(`Table ${table} data exported successfully`);
+    //       });
+    //     });
+    // });
+
+    // tables.forEach(table => {
+    //   sequelize.query(`DESCRIBE ${table}`)
+    //     .then(([results, metadata]) => {
+    //       const tableStructure = results.map(result => result.Field);
+    //       sequelize.query(`SELECT * FROM ${table}`)
+    //         .then(([results, metadata]) => {
+    //           const tableData = results.map(result => Object.values(result));
+    //           fs.writeFile(`${table}.json`, JSON.stringify({
+    //             structure: tableStructure,
+    //             data: tableData
+    //           }), (err) => {
+    //             if (err) throw err;
+    //             console.log(`Table ${table} data and structure exported successfully`);
+    //           });
+    //         });
+    //     });
+    // });
+  }
 };
 
 db.Sequelize  = Sequelize;

@@ -10,6 +10,7 @@ const db = require('./app/config/dbConfig');
 
 db.Connect();
 
+
 const jwt = require('jsonwebtoken');
 
 // for cors enable

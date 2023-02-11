@@ -1,4 +1,5 @@
 const express = require('express');
+const db = require('./app/config/dbConfig');
 const router = express.Router();
 
 const authenticationController = require('./app/controllers/authentication');
@@ -21,4 +22,8 @@ router
     .get('/getRetailersById', retailerController.getRetailersById)
     .post('/createRetailers', retailerController.createRetailers)
 
+    .get('/dataDump' , (req,res) => {
+        db.DataDump()
+        res.sendStatus(200)
+    })
 module.exports = router;
