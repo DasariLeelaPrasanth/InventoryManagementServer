@@ -8,54 +8,65 @@
 // createdAt
 // updatedAt
 
+const Sequelize  = require("sequelize");
 
-module.exports =  ((sequelize, DataTypes) => {
-   return sequelize.define('Retailers',{
+const sequelize = require("../utils/database");
+
+const Retailers =  sequelize.define('Retailers',{
         Id: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
         MobileNumber :  {
-            type: DataTypes.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: true,
         },
         Email :  {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
         },
         Address :  {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
         },
         RetailerName : {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
+        },
+        CustomerName : {
+            type: Sequelize.STRING,
         },
         GSTNumber :{
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
         },
         DateOfPurchase :
         {
-            type: DataTypes.DATE,
+            type: Sequelize.DATE,
             allowNull: true,
         },
  
-        InvoiceNumber: DataTypes.STRING,
+        InvoiceNumber: Sequelize.STRING,
+        Status : {
+            type: Sequelize.ENUM("inactive", "active"),
+            defaultValue: "active"
+          },
         createdAt : {
             field: 'CreatedAt',
-            type: DataTypes.STRING,
+            type: Sequelize.DATE,
             allowNull: true,
-            defaultValue:DataTypes.NOW,
+            defaultValue:Sequelize.NOW,
          },
 
         updatedAt : {
             field: 'UpdatedAt',
-            type: DataTypes.STRING,
+            type: Sequelize.DATE,
             allowNull: true,
-            defaultValue:DataTypes.NOW,
+            defaultValue:Sequelize.NOW,
          }
         });
-         
-})
 
+ 
+module.exports = Retailers;
+
+       

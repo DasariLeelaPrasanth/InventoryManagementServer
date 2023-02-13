@@ -16,38 +16,50 @@
 
 
 
-module.exports =  ((sequelize, DataTypes) => {
-  return  sequelize.define('Inventory',{
+const Sequelize  = require("sequelize");
+
+const sequelize = require("../utils/database");
+
+const Inventory = sequelize.define('Inventory',{
+
+
         Id: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        ProductName : DataTypes.STRING,
-        DateOfPurchase : DataTypes.DATE,
-        Quantity : DataTypes.INTEGER,
-        CostPrice : DataTypes.INTEGER,
-        SellingPrice : DataTypes.INTEGER,
-        Warranty : DataTypes.INTEGER,
-        Tax : DataTypes.INTEGER,
-        CurrentQuantity : DataTypes.INTEGER,
+        ProductName : Sequelize.STRING,
+        DateOfPurchase :{
+            type: Sequelize.DATE,
+            allowNull: true,
+        },
+        Quantity : Sequelize.INTEGER,
+        CostPrice : Sequelize.INTEGER,
+        SellingPrice : Sequelize.INTEGER,
+        Warranty : Sequelize.INTEGER,
+        Tax : Sequelize.INTEGER,
+        CurrentQuantity : Sequelize.INTEGER,
+        Discount : Sequelize.INTEGER,
         Status : {
-            type: DataTypes.ENUM("inactive", "active"),
+            type: Sequelize.ENUM("inactive", "active"),
             defaultValue: "inactive"
         },
     
             createdAt : {
                 field: 'CreatedAt',
-                type: DataTypes.STRING,
+                type: Sequelize.DATE,
                 allowNull: true,
-                defaultValue: DataTypes.NOW,
+                defaultValue: Sequelize.NOW,
              },
     
             updatedAt : {
                 field: 'UpdatedAt',
-                type: DataTypes.STRING,
+                type: Sequelize.DATE,
                 allowNull: true,
-                defaultValue: DataTypes.NOW,
+                defaultValue: Sequelize.NOW,
              }
     })
-})
+    
+    module.exports = Inventory;
+
+       

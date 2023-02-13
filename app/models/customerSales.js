@@ -9,37 +9,47 @@
 // createdAt
 // updatedAt
 
-module.exports =  ((sequelize, DataTypes) => {
-   return sequelize.define('CustomerSales',{
+const Sequelize  = require("sequelize");
+
+const sequelize = require("../utils/database");
+
+const CustomerSales = sequelize.define('CustomerSales',{
         Id: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        ProductName : DataTypes.STRING,
-        DateOfPurchase : DataTypes.DATE,
-        Quantity : DataTypes.INTEGER,
-        Price : DataTypes.INTEGER,
-        Discount : DataTypes.INTEGER,
-        Tax : DataTypes.INTEGER,
-        TotalPrice : DataTypes.INTEGER,
+        ProductName : Sequelize.STRING,
+        DateOfPurchase : {
+            type: Sequelize.DATE,
+            allowNull: true,
+        },
+        Quantity : Sequelize.INTEGER,
+        Price : Sequelize.INTEGER,
+        Discount : Sequelize.INTEGER,
+        Tax : Sequelize.INTEGER,
+        TotalPrice : Sequelize.INTEGER,
         Status : {
-            type: DataTypes.ENUM("inactive", "active"),
-            defaultValue: "inactive"
+            type: Sequelize.ENUM("inactive", "active"),
+            defaultValue: "active"
         },
     
         createdAt : {
             field: 'CreatedAt',
-            type: DataTypes.STRING,
+            type: Sequelize.DATE,
             allowNull: true,
-            defaultValue: DataTypes.NOW,
+            defaultValue: Sequelize.NOW,
          },
 
         updatedAt : {
             field: 'UpdatedAt',
-            type: DataTypes.STRING,
+            type: Sequelize.DATE,
             allowNull: true,
-            defaultValue: DataTypes.NOW,
+            defaultValue: Sequelize.NOW,
          }
 })
-})
+
+
+module.exports = CustomerSales;
+
+       

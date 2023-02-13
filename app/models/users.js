@@ -1,73 +1,73 @@
-// id - auto inc - primary
-// username
-// password
-// substart
-// subend
-// phoneno
-// email
-// address
-// logo - string - sever file path
-// company name
-// gst number
-// authentication token - 30 mins expiry - session
-// createdAt
-// updatedAt
+const Sequelize  = require("sequelize");
 
-module.exports =  ((sequelize, DataTypes) => {
+const sequelize = require("../utils/database");
 
-   return sequelize.define('Users',{
-        Id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        UserName :  DataTypes.STRING,
-        Password : DataTypes.STRING,
-        SubscriptionStart : DataTypes.DATE,
-        SubscriptionEnd : DataTypes.DATE ,
-        MobileNumber :{
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
-        Email :{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        Address :{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        LogoPath :{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        CompanyName :{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        GSTNumber :{
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        Token : {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
+const Users = sequelize.define("users", {
+  Id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
+  UserName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  Password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  SubscriptionStart: Sequelize.DATE,
+  SubscriptionEnd: Sequelize.DATE,
+  MobileNumber: {
+    type: Sequelize.BIGINT,
+    allowNull: true,
+  },
+  Email: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  Address: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  LogoPath: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  CompanyName: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  GSTNumber: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  Token: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  Status : {
+    type: Sequelize.ENUM("inactive", "active"),
+    defaultValue: "active"
+  },
 
-    
-        createdAt : {
-            field: 'CreatedAt',
-            type: DataTypes.STRING,
-            allowNull: true,
-            defaultValue: DataTypes.NOW,
-         },
+  createdAt: {
+    field: "CreatedAt",
+    type: Sequelize.DATE,
+    allowNull: true,
+    defaultValue: Sequelize.NOW,
+  },
 
-        updatedAt : {
-            field: 'UpdatedAt',
-            type: DataTypes.STRING,
-            allowNull: true,
-            defaultValue: DataTypes.NOW,
-         }
-    })
-})
+  updatedAt: {
+    field: "UpdatedAt",
+    type: Sequelize.DATE,
+    allowNull: true,
+    defaultValue: Sequelize.NOW,
+  },
+});
+
+module.exports = Users;
+
+
 

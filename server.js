@@ -5,13 +5,7 @@ var bodyParser = require('body-parser');
 const cors = require('cors');
 const router = require('./routes');
 const port = 3330;
-
-const db = require('./app/config/dbConfig');
-
-db.Connect();
-
-
-const jwt = require('jsonwebtoken');
+const sequelize = require('./app/utils/database')
 
 // for cors enable
 app.use(cors());
@@ -26,39 +20,67 @@ app.use(bodyParser.json());
 app.use('/',router);
 
 
-const checkToken = (req, res, next) => {
-    console.log( req.headers," req.headers req.headers req.headers req.headers req.headers req.headers req.headers");
-    const token = req.headers['x-access-token'] || req.headers['authorization']
+const Users = require('./app/models/users');
+const Retailers = require('./app/models/retailer');
+const Customers = require('./app/models/customer');
+const CustomerSales = require('./app/models/customerSales');
+const Inventory = require('./app/models/inventory');
 
-    if (!token) {
-        return res.status(401).send({ message: 'Unauthorized access' })
-    }
+Users.hasMany(Retailers);
+Retailers.belongsTo(Users ,{
+    constraints: true,
+    onDelete: 'CASCADE'
+} );
 
-    try {
-        try{
 
-            const decoded = jwt.verify(token, 'secretkey')
-            req.user = decoded
-            console.log( req.user," req.user req.user");
-        }catch(e){
-            console.log(e);
-        }
-        next()
-    } catch (err) {
-        return res.status(401).send({ message: 'Invalid token' })
-    }
-}
+Users.hasMany(Customers);
+Customers.belongsTo(Users,{
+  constraints: true,
+    onDelete: 'CASCADE'
+} );
 
-app.get('/secure', checkToken, (req, res) => {
-    // Endpoint function
-    res.sendStatus(200)
-})
 
-// db.Sync()
-app.listen(port, ()=>{
-    // logger.info(`Example app listening on port ${port}!`);
-    console.log(`App is running at http://localhost:${port}` );
-}) 
+Users.hasMany(CustomerSales);
+CustomerSales.belongsTo(Users,{
+  constraints: true,
+    onDelete: 'CASCADE'
+} );
+
+
+Customers.hasMany(CustomerSales);
+CustomerSales.belongsTo(Customers,{
+    constraints: true,
+    onDelete: 'CASCADE'
+} );
+
+
+Retailers.hasMany(Inventory);
+Inventory.belongsTo(Retailers,{
+    constraints: true,
+    onDelete: 'CASCADE'
+} );
+
+Users.hasMany(Inventory);
+Inventory.belongsTo(Users,{
+  constraints: true,
+    onDelete: 'CASCADE'
+});
+
+
+sequelize
+    .sync({force : false})
+    .then(result => {
+        app.listen(port, ()=>{
+            // logger.info(`Example app listening on port ${port}!`);
+            console.log(`App is running at http://localhost:${port}` );
+        }) 
+    })
+    .catch(err => {
+        console.log(err);
+    })
+
+
+
 
     
     

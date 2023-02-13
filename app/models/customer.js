@@ -8,49 +8,58 @@
 // createdAt
 // updatedAt
 
-module.exports =  ((sequelize, DataTypes) => {
-  return  sequelize.define('Customers',{
+const Sequelize  = require("sequelize");
+
+const sequelize = require("../utils/database");
+
+const Customers = sequelize.define('Customers',{
         Id: {
-            type: DataTypes.INTEGER,
+            type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
        
         MobileNumber : {
-            type: DataTypes.INTEGER,
+            type: Sequelize.BIGINT,
             allowNull: true,
         },
         Email :  {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
         },
         Address :  {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
         },
-        InvoiceNumber: DataTypes.STRING,
-        CustomerName : DataTypes.STRING,
-        BusinessName : DataTypes.STRING,
+        InvoiceNumber: Sequelize.STRING,
+        CustomerName : Sequelize.STRING,
+        BusinessName : Sequelize.STRING,
         GSTNumber :  {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true,
         },
         DateOfPurchase :  {
-            type: DataTypes.DATE,
+            type: Sequelize.DATE,
             allowNull: true,
-        },        
+        },     
+        Status : {
+            type: Sequelize.ENUM("inactive", "active"),
+            defaultValue: "active"
+          },   
         createdAt : {
             field: 'CreatedAt',
-            type: DataTypes.STRING,
+            type: Sequelize.DATE,
             allowNull: true,
-            defaultValue: DataTypes.NOW,
+            defaultValue: Sequelize.NOW,
          },
 
         updatedAt : {
             field: 'UpdatedAt',
-            type: DataTypes.STRING,
+            type: Sequelize.DATE,
             allowNull: true,
-            defaultValue: DataTypes.NOW,
+            defaultValue: Sequelize.NOW,
          }
 })
-})
+
+
+module.exports = Customers;

@@ -1,27 +1,40 @@
-const jwt = require('jsonwebtoken');
-var db = require('../config/dbConfig');
-
-const users = db.Users;
+const Users = require("../models/users");
 
 
-module.exports = {
-    login: (async (req, res) => {
-        console.log(req.body,"fbjbfeejk");
-        let creds = req.body
-        let user = await users.findOne({
-            where: creds ,
-          });
-          if (!user) {
-            return res.status(401).send({ message: 'Invalid credentials' })
+const UserController = {
+    getUsers :  (async (req,res) => {
+        try{
+           let usersData = await Users.findAll();
+           res.status(200).send(usersData);
+        }catch(err){
+            console.log(err);
+            throw err
         }
-
-        const token = jwt.sign(creds.UserName, 'secretkey')
-        user.token = token
-        await user.save()
-        res.send({ message: 'Success', token })
-    
     }),
-    
-    
+
+    getUserById : (async (req,res) => {
+        try{
+            let userId = req.params.id;
+            let userData = await Users.findByPk(userId);
+            res.status(200).send(userData);
+        }catch(err){
+            console.log(err);
+            throw err
+        }
+    }),
+
+    addUser : (async (req,res) => {
+        let body = req.body;
+        console.log(body,"bodybody");
+        try{
+            let data = await Users.upsert(body);
+            res.status(201).send(data);
+        }catch(err){
+            console.log(err);
+            throw err
+        }
+    })
 }
+
+module.exports = UserController;
 
