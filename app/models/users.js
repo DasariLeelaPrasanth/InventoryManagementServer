@@ -35,6 +35,10 @@ const Users = sequelize.define("users", {
     type: Sequelize.STRING,
     allowNull: true,
   },
+  SignaturePath: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
   CompanyName: {
     type: Sequelize.STRING,
     allowNull: true,

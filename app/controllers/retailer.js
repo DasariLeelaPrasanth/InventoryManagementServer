@@ -3,6 +3,10 @@ const retailers = require("../models/retailer");
 const inventory = require("../models/inventory");
 
 
+const Sequelize  = require("sequelize");
+
+const sequelize = require("../utils/database");
+
 module.exports = {
     getRetailers: (async (req, res) => {
       console.log("in");
@@ -15,6 +19,30 @@ module.exports = {
             .catch(err => {
               res.json({ error: err });
             });
+    }),
+
+    getInventory: (async (req, res) => {
+      console.log("in");
+      await inventory.findAll(
+        {
+          attributes: ["ProductName",
+          [sequelize.fn('SUM', sequelize.col('Quantity')), 'TotalQuantity'],
+           [sequelize.fn('SUM', sequelize.col('CurrentQuantity')), 'TotalCurrentQuantity'],
+           [sequelize.fn('MAX', sequelize.col('CostPrice')), 'CostPrice'],
+           [sequelize.fn('MAX', sequelize.col('SellingPrice')), 'SellingPrice'],
+           [sequelize.fn('MAX', sequelize.col('Tax')), 'Tax'],
+           [sequelize.fn('MAX', sequelize.col('Discount')), 'Discount'],
+          "Warranty",
+        "DateOfPurchase"
+        ],
+          group: ['ProductName','Warranty','DateOfPurchase']}
+       )
+          .then(inventory => {
+            res.json(inventory);
+          })
+          .catch(err => {
+            res.json({ error: err });
+          });
     }),
 
     // getRetailersById: (async (req, res) => {

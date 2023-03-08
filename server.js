@@ -7,6 +7,7 @@ const router = require('./routes');
 const port = 3330;
 const sequelize = require('./app/utils/database')
 
+
 // for cors enable
 app.use(cors());
 app.options('*', cors());
@@ -15,10 +16,14 @@ app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
-app.use(bodyParser.json());
 
-app.use('/',router);
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(bodyParser.text({ limit: '200mb' }));
 
+
+  app.use('/',router);
+  
 
 const Users = require('./app/models/users');
 const Retailers = require('./app/models/retailer');
@@ -78,9 +83,3 @@ sequelize
     .catch(err => {
         console.log(err);
     })
-
-
-
-
-    
-    
