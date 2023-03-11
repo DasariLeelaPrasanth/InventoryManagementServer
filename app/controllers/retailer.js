@@ -9,7 +9,12 @@ const sequelize = require("../utils/database");
 
 module.exports = {
     getRetailers: (async (req, res) => {
+      const startDate = req.query.startDate;
+      const endDate = req.query.endDate;
+      
+   
       console.log("in");
+      console.log(req.query);
         await retailers.findAll(
           { include: inventory }
          )
@@ -26,16 +31,14 @@ module.exports = {
       await inventory.findAll(
         {
           attributes: ["ProductName",
-          [sequelize.fn('SUM', sequelize.col('Quantity')), 'TotalQuantity'],
+          [sequelize.fn('SUM', sequelize.col('Quantity')), 'quantityPurchased'],
            [sequelize.fn('SUM', sequelize.col('CurrentQuantity')), 'TotalCurrentQuantity'],
            [sequelize.fn('MAX', sequelize.col('CostPrice')), 'CostPrice'],
            [sequelize.fn('MAX', sequelize.col('SellingPrice')), 'SellingPrice'],
            [sequelize.fn('MAX', sequelize.col('Tax')), 'Tax'],
-           [sequelize.fn('MAX', sequelize.col('Discount')), 'Discount'],
-          "Warranty",
-        "DateOfPurchase"
+           [sequelize.fn('MAX', sequelize.col('Discount')), 'Discount']
         ],
-          group: ['ProductName','Warranty','DateOfPurchase']}
+          group: ['ProductName']}
        )
           .then(inventory => {
             res.json(inventory);
@@ -45,6 +48,8 @@ module.exports = {
           });
     }),
 
+
+    
     // getRetailersById: (async (req, res) => {
     //     try {
     //         const retailer = await retailers.findByPk(req.params.id, {
@@ -77,7 +82,7 @@ module.exports = {
             if (inventoryData && inventoryData.length) {
               for (let i = 0; i < inventoryData.length; i++) {
                 console.log(inventoryData[i],"lll");
-                const inv = inventoryData[i];
+                let inv = inventoryData[i];
                 inv.RetailerId = retailer[0].Id;
                 inv.DateOfPurchase = retailerData.DateOfPurchase;
                 await inventory.findOrCreate({

@@ -51,12 +51,17 @@ CustomerSales.belongsTo(Users,{
     onDelete: 'CASCADE'
 } );
 
-
-Customers.hasMany(CustomerSales);
-CustomerSales.belongsTo(Customers,{
-    constraints: true,
+Users.hasMany(Inventory);
+Inventory.belongsTo(Users,{
+  constraints: true,
     onDelete: 'CASCADE'
-} );
+});
+
+// Customers.hasMany(CustomerSales);
+// CustomerSales.belongsTo(Customers,{
+//     constraints: true,
+//     onDelete: 'CASCADE'
+// } );
 
 
 Retailers.hasMany(Inventory);
@@ -65,11 +70,7 @@ Inventory.belongsTo(Retailers,{
     onDelete: 'CASCADE'
 } );
 
-Users.hasMany(Inventory);
-Inventory.belongsTo(Users,{
-  constraints: true,
-    onDelete: 'CASCADE'
-});
+
 
 
 sequelize

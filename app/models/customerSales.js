@@ -12,6 +12,9 @@
 const Sequelize  = require("sequelize");
 
 const sequelize = require("../utils/database");
+// const Sequelize  = require("sequelize");
+// const sequelize = require("../utils/database");
+const Customers = require("./customer");
 
 const CustomerSales = sequelize.define('CustomerSales',{
         Id: {
@@ -49,7 +52,15 @@ const CustomerSales = sequelize.define('CustomerSales',{
          }
 })
 
+Customers.hasMany(CustomerSales);
+CustomerSales.belongsTo(Customers, {
+  foreignKey: {
+    name: 'CustomerId',
+    allowNull: false
+  }
+});
 
+// module.exports = CustomerSales;
 module.exports = CustomerSales;
 
        

@@ -7,6 +7,7 @@ const authenticationController = require('./app/controllers/authentication');
 const customerController = require('./app/controllers/customer');
 const retailerController = require('./app/controllers/retailer');
 const fileUploadController = require('./app/controllers/fileUpload');
+const dataDumpController = require('./app/controllers/dataDump');
 
 router
     .get('/', (req , res) =>{
@@ -22,11 +23,11 @@ router
 
     .post('/login', authenticationController.login)
 
-
-    // .get('/getCustomerSales', customerController.getCustomerSales)
-    // .get('/getCustomerSalesById', customerController.getCustomerSalesById)
-    // .post('/createCustomerSales', customerController.createCustomerSales)
-
+   
+    .get('/getCustomerSales', customerController.getCustomerSales)
+    .get('/getSoldProducts', customerController.getSoldProducts)
+    .post('/createCustomerSales', customerController.createCustomerSales)
+    
 
     .get('/getRetailers', retailerController.getRetailers)
     .get('/getInventory', retailerController.getInventory)
@@ -34,5 +35,7 @@ router
 
     .post('/addFile',fileUploadController.addFile)
     .get('/getFile/:id',fileUploadController.getFile)
+
+    .get('/getDataDump' , dataDumpController.getDataDump)
     
 module.exports = router;
